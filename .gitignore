@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+node_modules/
+dist/
+coverage/
+backend/src/generated/
+*.log
+.DS_Store
+
+# Local tooling / agent session artifacts
+.ai_work_dir/
+.claude/
