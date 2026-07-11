@@ -1,31 +1,33 @@
 :root {
-  --text: #2d2a32;
-  --text-muted: #6b6375;
-  --bg: #fafafa;
+  --text: #14151a;
+  --text-muted: #52565f;
+  --bg: #f7f7f8;
   --surface: #fff;
-  --border: #e2e1e5;
+  --border: #dcdde2;
   --accent: #6d28d9;
   --accent-contrast: #fff;
   --danger: #b42318;
   --danger-bg: #fef3f2;
 
   color-scheme: light dark;
-  font: 15px/1.5 system-ui, 'Segoe UI', Roboto, sans-serif;
+  font:
+    15px/1.6 'JetBrains Mono', ui-monospace, 'SFMono-Regular', 'Cascadia Code', Menlo, Consolas,
+    monospace;
   color: var(--text);
   background: var(--bg);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --text: #e5e4e7;
-    --text-muted: #9ca3af;
-    --bg: #16171d;
-    --surface: #1f2028;
-    --border: #2e303a;
-    --accent: #c084fc;
-    --accent-contrast: #16171d;
-    --danger: #ff8a80;
-    --danger-bg: #3a1f1d;
+    --text: #f5f6f8;
+    --text-muted: #9aa0ab;
+    --bg: #0a0b0d;
+    --surface: #17181c;
+    --border: #2b2d33;
+    --accent: #c58cff;
+    --accent-contrast: #0a0b0d;
+    --danger: #ff9c93;
+    --danger-bg: #2a1512;
   }
 }
 
@@ -39,11 +41,15 @@ body {
 
 h1 {
   font-size: 22px;
+  font-weight: 700;
   margin: 0 0 16px;
 }
 
 h2 {
-  font-size: 16px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   margin: 0 0 8px;
 }
 
@@ -154,17 +160,34 @@ a {
 
 .app-nav {
   display: flex;
-  gap: 16px;
+  gap: 10px;
 }
 
 .app-nav a {
   text-decoration: none;
   color: var(--text-muted);
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 10px 20px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease,
+    background 0.15s ease;
+}
+
+.app-nav a:hover {
+  color: var(--text);
+  border-color: var(--accent);
 }
 
 .app-nav a.active {
   color: var(--accent);
+  border-color: var(--accent);
 }
 
 .app-user {
