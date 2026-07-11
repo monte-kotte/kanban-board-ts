@@ -1,9 +1,10 @@
 import { useDraggable } from '@dnd-kit/core';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import type { Ticket } from '../../api/types';
 
 export function TicketCard({ ticket }: { ticket: Ticket }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: ticket.id,
   });
@@ -22,7 +23,9 @@ export function TicketCard({ ticket }: { ticket: Ticket }) {
       {...listeners}
       {...attributes}
       className={`ticket-card${isDragging ? ' dragging' : ''}`}
-      onClick={() => navigate(`/tickets/${ticket.id}`)}
+      onClick={() =>
+        navigate(`/tickets/${ticket.id}`, { state: { backgroundLocation: location } })
+      }
     >
       <span className={`ticket-type ticket-type-${ticket.type}`}>{ticket.type}</span>
       <p className="ticket-title">{ticket.title}</p>

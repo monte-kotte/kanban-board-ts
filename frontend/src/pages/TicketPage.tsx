@@ -13,7 +13,7 @@ import { ApiError } from '../api/client';
 import { TICKET_STATES, TICKET_STATE_LABELS, TICKET_TYPES } from '../api/types';
 import type { TicketState, TicketType } from '../api/types';
 
-export function TicketPage() {
+export function TicketPage({ onClose }: { onClose?: () => void } = {}) {
   const { id } = useParams();
   const isEditMode = Boolean(id);
   const [searchParams] = useSearchParams();
@@ -65,6 +65,12 @@ export function TicketPage() {
           id,
           data: { teamId, epicId: epicId || null, type, state, title, body },
         });
+        if (onClose) {
+          onClose();
+        } else {
+          navigate(`/?team=${teamId}`);
+        }
+        return;
       } else {
         await createTicket.mutateAsync({
           teamId,
@@ -86,7 +92,11 @@ export function TicketPage() {
     if (!window.confirm('Delete this ticket? This cannot be undone.')) return;
     try {
       await deleteTicket.mutateAsync(id);
-      navigate(`/?team=${teamId}`);
+      if (onClose) {
+        onClose();
+      } else {
+        navigate(`/?team=${teamId}`);
+      }
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Failed to delete ticket');
     }
@@ -107,9 +117,11 @@ export function TicketPage() {
 
   return (
     <div className="page ticket-page">
-      <Link to={teamId ? `/?team=${teamId}` : '/'} className="button-link back-link">
-        &larr; Back to board
-      </Link>
+      {!onClose && (
+        <Link to={teamId ? `/?team=${teamId}` : '/'} className="button-link back-link">
+          &larr; Back to board
+        </Link>
+      )}
       <h1>{isEditMode ? 'Edit ticket' : 'New ticket'}</h1>
 
       {isEditMode && existingTicket && (
@@ -198,7 +210,10 @@ export function TicketPage() {
           </button>
           {isEditMode && (
             <>
-              <button type="button" onClick={() => navigate(`/?team=${teamId}`)}>
+              <button
+                type="button"
+                onClick={() => (onClose ? onClose() : navigate(`/?team=${teamId}`))}
+              >
                 Close
               </button>
               <button type="button" onClick={handleDelete}>
