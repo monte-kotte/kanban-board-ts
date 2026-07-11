@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useTeams } from '../api/teams';
 import { useEpics } from '../api/epics';
 import {
@@ -66,14 +66,14 @@ export function TicketPage() {
           data: { teamId, epicId: epicId || null, type, state, title, body },
         });
       } else {
-        const created = await createTicket.mutateAsync({
+        await createTicket.mutateAsync({
           teamId,
           epicId: epicId || undefined,
           type,
           title,
           body,
         });
-        navigate(`/tickets/${created.id}`);
+        navigate(`/?team=${teamId}`);
         return;
       }
     } catch (err) {
@@ -107,6 +107,9 @@ export function TicketPage() {
 
   return (
     <div className="page ticket-page">
+      <Link to={teamId ? `/?team=${teamId}` : '/'} className="button-link back-link">
+        &larr; Back to board
+      </Link>
       <h1>{isEditMode ? 'Edit ticket' : 'New ticket'}</h1>
 
       {isEditMode && existingTicket && (
@@ -194,9 +197,14 @@ export function TicketPage() {
             {isSaving ? 'Saving...' : 'Save'}
           </button>
           {isEditMode && (
-            <button type="button" onClick={handleDelete}>
-              Delete
-            </button>
+            <>
+              <button type="button" onClick={() => navigate(`/?team=${teamId}`)}>
+                Close
+              </button>
+              <button type="button" onClick={handleDelete}>
+                Delete
+              </button>
+            </>
           )}
         </div>
       </form>

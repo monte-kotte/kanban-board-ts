@@ -237,6 +237,13 @@ a {
   max-width: none;
 }
 
+.back-link {
+  margin-bottom: 16px;
+  background: transparent;
+  color: var(--accent);
+  padding: 4px 0;
+}
+
 .board-columns {
   display: grid;
   grid-template-columns: repeat(5, minmax(220px, 1fr));

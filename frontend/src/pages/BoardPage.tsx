@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { DndContext, type DragEndEvent } from '@dnd-kit/core';
+import { useEffect, useMemo, useState } from 'react';
+import { DndContext, PointerSensor, useSensor, useSensors, type DragEndEvent } from '@dnd-kit/core';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTeams } from '../api/teams';
@@ -8,6 +8,8 @@ import { useTickets, useUpdateTicket } from '../api/tickets';
 import { TICKET_STATES, TICKET_TYPES } from '../api/types';
 import type { Ticket, TicketState } from '../api/types';
 import { Column } from '../components/board/Column';
+
+const LAST_TEAM_KEY = 'kanban:lastTeamId';
 
 export function BoardPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -24,6 +26,10 @@ export function BoardPage() {
 
   const [dragError, setDragError] = useState<string | null>(null);
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+  );
+
   function updateParam(key: string, value: string) {
     const next = new URLSearchParams(searchParams);
     if (value) {
@@ -33,6 +39,23 @@ export function BoardPage() {
     }
     setSearchParams(next);
   }
+
+  useEffect(() => {
+    if (teamId) {
+      localStorage.setItem(LAST_TEAM_KEY, teamId);
+    }
+  }, [teamId]);
+
+  useEffect(() => {
+    if (teamId || !teams || teams.length === 0) return;
+    const lastTeamId = localStorage.getItem(LAST_TEAM_KEY);
+    if (lastTeamId && teams.some((team) => team.id === lastTeamId)) {
+      const next = new URLSearchParams(searchParams);
+      next.set('team', lastTeamId);
+      setSearchParams(next, { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [teamId, teams]);
 
   const filteredTickets = useMemo(() => {
     if (!tickets) return [];
@@ -150,7 +173,7 @@ export function BoardPage() {
       ) : isLoading ? (
         <p>Loading tickets...</p>
       ) : (
-        <DndContext onDragEnd={handleDragEnd}>
+        <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
           <div className="board-columns">
             {TICKET_STATES.map((state) => (
               <Column key={state} state={state} tickets={ticketsByState[state]} />
