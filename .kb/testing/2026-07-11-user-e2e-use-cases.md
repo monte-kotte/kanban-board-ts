@@ -7,6 +7,15 @@ automation (e.g. Playwright + cucumber). Complements the automated Jest
 e2e suite at `backend/test/app.e2e-spec.ts`, which covers the same
 business rules at the API level.
 
+UI automation: a Playwright Page Object Model suite lives in `e2e/`. Shared
+domain models/builders sit under `e2e/src/common/`, and the browser suite
+(locators / pages / steps / fixtures / tests) under `e2e/src/ui/`, leaving room
+for a future `e2e/src/api/` suite (each is its own Playwright project). See
+`e2e/README.md`. It currently automates the core happy path — sign up, log in,
+create a team, create a ticket, and comment on it
+(`e2e/src/ui/tests/ticket-lifecycle.spec.ts`).
+The remaining scenarios below are still to be automated.
+
 Scope: user-facing flows through the browser at `http://localhost:5173`
 against the containerized stack (`docker compose up --build`).
 
