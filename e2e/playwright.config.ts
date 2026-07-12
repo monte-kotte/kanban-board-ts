@@ -5,6 +5,11 @@ import { defineConfig, devices } from '@playwright/test';
  * Override the base URL with E2E_BASE_URL when the frontend is served elsewhere.
  */
 const baseURL = process.env.E2E_BASE_URL ?? 'http://localhost:5173';
+// Playwright resolves relative request paths against baseURL using standard URL
+// rules: without a trailing slash, the last path segment (here "api") is dropped
+// instead of kept. Normalize to always end in "/" so "auth/signup" resolves to
+// ".../api/auth/signup", not ".../auth/signup".
+const apiBaseURL = `${(process.env.E2E_API_URL ?? 'http://localhost:3000/api').replace(/\/+$/, '')}/`;
 
 export default defineConfig({
   testMatch: '**/*.spec.ts',
@@ -28,11 +33,10 @@ export default defineConfig({
       testDir: './src/ui/tests',
       use: { ...devices['Desktop Chrome'], baseURL },
     },
-    // Future API e2e suite — no browser, just the HTTP layer:
-    // {
-    //   name: 'api',
-    //   testDir: './src/api/tests',
-    //   use: { baseURL: process.env.E2E_API_URL ?? 'http://localhost:3000/api' },
-    // },
+    {
+      name: 'api',
+      testDir: './src/api/tests',
+      use: { baseURL: apiBaseURL },
+    },
   ],
 });
