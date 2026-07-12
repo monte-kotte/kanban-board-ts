@@ -28,5 +28,6 @@ export class LoginPage extends BasePage {
 
   async expectError(): Promise<void> {
     await expect(this.locators.formError).toBeVisible();
+    await expect(this.page).toHaveURL(ROUTES.login);
   }
 }

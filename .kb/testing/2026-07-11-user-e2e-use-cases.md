@@ -11,9 +11,20 @@ UI automation: a Playwright Page Object Model suite lives in `e2e/`. Shared
 domain models/builders sit under `e2e/src/common/`, and the browser suite
 (locators / pages / steps / fixtures / tests) under `e2e/src/ui/`, leaving room
 for a future `e2e/src/api/` suite (each is its own Playwright project). See
-`e2e/README.md`. It currently automates the core happy path — sign up, log in,
-create a team, create a ticket, and comment on it
-(`e2e/src/ui/tests/ticket-lifecycle.spec.ts`).
+`e2e/README.md`. It currently automates:
+- the core happy path — sign up, log in, create a team, create a ticket, and
+  comment on it (`ticket-lifecycle.spec.ts`)
+- duplicate-email signup and wrong-password login errors (`auth.spec.ts`)
+- case-insensitive team-name conflicts (`teams-management.spec.ts`)
+- closing the ticket edit form without saving discards changes
+  (`ticket-editing.spec.ts`)
+- whitespace-only comments are rejected (`comments.spec.ts`)
+- filtering the board by ticket type (`board-filters.spec.ts`)
+
+Note: the local stack runs a single, non-scaled backend container, so the
+Playwright config pins `workers: 1` — parallel signups/logins overload bcrypt
+hashing on a single container and cause spurious failures (verified: 6/7
+failed at high parallelism, all passed serially, ~4-5s each).
 The remaining scenarios below are still to be automated.
 
 Scope: user-facing flows through the browser at `http://localhost:5173`

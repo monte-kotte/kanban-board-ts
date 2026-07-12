@@ -31,6 +31,10 @@ export class TicketPage extends BasePage {
     await this.locators.saveButton.click();
   }
 
+  async setTitle(title: string): Promise<void> {
+    await this.locators.titleInput.fill(title);
+  }
+
   async close(): Promise<void> {
     await this.locators.closeButton.click();
   }

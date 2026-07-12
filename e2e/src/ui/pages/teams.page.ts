@@ -40,6 +40,10 @@ export class TeamsPage extends BasePage {
     await expect(this.locators.teamRow(name)).toHaveCount(0);
   }
 
+  async expectTeamCount(name: string, count: number): Promise<void> {
+    await expect(this.locators.teamRow(name)).toHaveCount(count);
+  }
+
   async expectError(): Promise<void> {
     await expect(this.locators.formError).toBeVisible();
   }
