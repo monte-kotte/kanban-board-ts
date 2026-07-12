@@ -9,9 +9,10 @@ business rules at the API level.
 
 UI automation: a Playwright Page Object Model suite lives in `e2e/`. Shared
 domain models/builders sit under `e2e/src/common/`, and the browser suite
-(locators / pages / steps / fixtures / tests) under `e2e/src/ui/`, leaving room
-for a future `e2e/src/api/` suite (each is its own Playwright project). See
-`e2e/README.md`. It currently automates:
+(locators / pages / steps / fixtures / tests) under `e2e/src/ui/`; there is
+now also an `e2e/src/api/` suite driving the REST endpoints directly (see
+`.kb/testing/2026-07-12-api-test-scenarios.md`) — each is its own Playwright
+project. See `e2e/README.md`. The UI suite currently automates:
 - the core happy path — sign up, log in, create a team, create a ticket, and
   comment on it (`ticket-lifecycle.spec.ts`)
 - duplicate-email signup and wrong-password login errors (`auth.spec.ts`)
