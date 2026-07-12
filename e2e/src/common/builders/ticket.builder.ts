@@ -1,5 +1,6 @@
+import { TICKET_TYPE } from '../models';
 import type { TicketModel, TicketState, TicketType } from '../models';
-import { unique } from './unique';
+import { unique } from '../utils';
 
 /** Fluent builder for a {@link TicketModel}. A team name is required. */
 export class TicketBuilder {
@@ -42,5 +43,30 @@ export class TicketBuilder {
 
   build(): TicketModel {
     return { ...this.model };
+  }
+
+  /** A bug ticket with every required field populated, nothing optional. */
+  static bug(teamName: string): TicketBuilder {
+    return new TicketBuilder().withTeam(teamName).withType(TICKET_TYPE.BUG);
+  }
+
+  /** A feature ticket with every required field populated, nothing optional. */
+  static feature(teamName: string): TicketBuilder {
+    return new TicketBuilder().withTeam(teamName).withType(TICKET_TYPE.FEATURE);
+  }
+
+  /** A fix ticket with every required field populated, nothing optional. */
+  static fix(teamName: string): TicketBuilder {
+    return new TicketBuilder().withTeam(teamName).withType(TICKET_TYPE.FIX);
+  }
+
+  /** A ticket with only its required fields set — no epic, no state override. */
+  static requiredFieldsOnly(teamName: string): TicketBuilder {
+    return new TicketBuilder().withTeam(teamName);
+  }
+
+  /** A ticket with its optional fields (epic) also populated. */
+  static withOptionalFields(teamName: string, epicTitle: string): TicketBuilder {
+    return new TicketBuilder().withTeam(teamName).withEpic(epicTitle);
   }
 }

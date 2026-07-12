@@ -1,5 +1,5 @@
 import type { UserModel } from '../models';
-import { unique } from './unique';
+import { unique } from '../utils';
 
 /** Fluent builder for a {@link UserModel} with sensible, valid defaults. */
 export class UserBuilder {

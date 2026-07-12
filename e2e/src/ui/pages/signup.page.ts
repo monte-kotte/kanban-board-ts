@@ -1,6 +1,7 @@
 import { expect, type Page } from '@playwright/test';
 import { BasePage } from './base.page';
 import { AuthLocators } from '../locators';
+import { ROUTES } from '../constants';
 import type { UserModel } from '../../common/models';
 
 export class SignupPage extends BasePage {
@@ -12,7 +13,7 @@ export class SignupPage extends BasePage {
   }
 
   async open(): Promise<void> {
-    await this.goto('/signup');
+    await this.goto(ROUTES.signup);
     await expect(this.locators.heading('Sign up')).toBeVisible();
   }
 

@@ -13,8 +13,10 @@ e2e/
 └─ src/
    ├─ common/                   # shared by every suite (UI + future API)
    │  ├─ models/                # data shapes + domain constants (UserModel, TicketModel, …)
-   │  └─ builders/              # fluent test-data builders with unique defaults
+   │  ├─ builders/              # fluent test-data builders with unique defaults
+   │  └─ utils/                 # generic helpers (e.g. unique-value generation)
    ├─ ui/                       # browser end-to-end suite (Page Object Model)
+   │  ├─ constants/             # routes and other UI-suite-only constants
    │  ├─ locators/              # element selectors only — one class per page area
    │  ├─ pages/                 # page objects: actions + assertions using locators
    │  ├─ steps/                 # business flows composed from page objects
@@ -62,7 +64,7 @@ npm run report        # open the last HTML report
 
 ## Notes
 
-- Test data is generated with unique suffixes (see `src/builders/unique.ts`),
+- Test data is generated with unique suffixes (see `src/common/utils/string.utils.ts`),
   so specs are safe to run repeatedly against a shared database and in parallel
   — no manual cleanup or DB reset required.
 - The ticket create/edit form renders both as a full page and inside a modal.

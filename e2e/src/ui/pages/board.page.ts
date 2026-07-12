@@ -1,6 +1,7 @@
 import { expect, type Page } from '@playwright/test';
 import { BasePage } from './base.page';
 import { BoardLocators } from '../locators';
+import { ROUTES } from '../constants';
 import type { TicketState, TicketType } from '../../common/models';
 
 export class BoardPage extends BasePage {
@@ -12,7 +13,7 @@ export class BoardPage extends BasePage {
   }
 
   async open(): Promise<void> {
-    await this.goto('/');
+    await this.goto(ROUTES.board);
   }
 
   async selectTeam(teamName: string): Promise<void> {

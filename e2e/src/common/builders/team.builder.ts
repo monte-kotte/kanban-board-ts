@@ -1,5 +1,5 @@
 import type { TeamModel } from '../models';
-import { unique } from './unique';
+import { unique } from '../utils';
 
 /** Fluent builder for a {@link TeamModel} with a unique default name. */
 export class TeamBuilder {

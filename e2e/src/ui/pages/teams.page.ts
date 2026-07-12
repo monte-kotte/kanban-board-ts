@@ -1,6 +1,7 @@
 import { expect, type Page } from '@playwright/test';
 import { BasePage } from './base.page';
 import { TeamsLocators } from '../locators';
+import { ROUTES } from '../constants';
 import type { TeamModel } from '../../common/models';
 
 export class TeamsPage extends BasePage {
@@ -12,7 +13,7 @@ export class TeamsPage extends BasePage {
   }
 
   async open(): Promise<void> {
-    await this.goto('/teams');
+    await this.goto(ROUTES.teams);
     await expect(this.locators.heading).toBeVisible();
   }
 

@@ -1,5 +1,6 @@
 import { test } from '../fixtures/test-fixtures';
-import { TeamBuilder, TicketBuilder, UserBuilder } from '../../common/builders';
+import { CommentBuilder, TeamBuilder, TicketBuilder, UserBuilder } from '../../common/builders';
+import { TICKET_STATE } from '../../common/models';
 
 /**
  * End-to-end happy path spanning the core domain:
@@ -19,7 +20,10 @@ test.describe('Ticket lifecycle', () => {
   }) => {
     const user = new UserBuilder().build();
     const team = new TeamBuilder().build();
-    const ticket = new TicketBuilder().withTeam(team.name).withType('bug').build();
+    const ticket = TicketBuilder.bug(team.name).build();
+    const comment = new CommentBuilder()
+      .withBody('Reproduced on the latest build — investigating.')
+      .build();
 
     await test.step('Sign up and log in', async () => {
       await authSteps.signUpAndLogin(user);
@@ -31,15 +35,15 @@ test.describe('Ticket lifecycle', () => {
 
     await test.step('Create a ticket and confirm it lands in the "New" column', async () => {
       await ticketSteps.createTicket(ticket);
-      await boardPage.expectCardInColumn('new', ticket.title);
+      await boardPage.expectCardInColumn(TICKET_STATE.NEW, ticket.title);
     });
 
     await test.step('Open the ticket and add a comment', async () => {
       await boardPage.openTicket(ticket.title);
       await ticketPage.expectOpen();
       await ticketPage.expectNoComments();
-      await ticketPage.addComment('Reproduced on the latest build — investigating.');
-      await ticketPage.expectComment('Reproduced on the latest build — investigating.');
+      await ticketPage.addComment(comment.body);
+      await ticketPage.expectComment(comment.body);
     });
   });
 });
