@@ -1,7 +1,12 @@
 # Kanban Board
 
-A small ticket tracker: teams, epics, tickets, comments, and a draggable
-Kanban board. Three-tier SPA (React) + API (NestJS) + RDBMS (PostgreSQL).
+A ticket-tracking application with teams, epics, tickets, comments, and a drag-and-drop Kanban board.
+
+Built as a three-tier architecture:
+
+- Frontend: React SPA
+- Backend: NestJS API
+- Database: PostgreSQL
 
 ## Known deviations from the original spec
 
